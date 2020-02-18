@@ -1,13 +1,14 @@
 import requests
 
-url = 'http://data.nhi.gov.tw/Datasets/Download.ashx?rid=A21030000I-D50001-001&l=https://data.nhi.gov.tw/resource/mask/maskdata.csv'
+url = 'https://quality.data.gov.tw/dq_download_csv.php?nid=116285&md5_url=2150b333756e64325bdbc4a5fd45fad1'
 
-r = requests.get(url)
-r.encoding = 'UTF-8'
-content = r.text
+web_data = requests.get(url)
+storeList = web_data.text.split('\n')
 
-storeList = [x.split(',') for x in content.split('\r\n')[1:] if x != '']
-storeList = sorted(storeList,key=lambda x:int(x[4])*-1)
+storeList = [store.split(',') for store in web_data.text.split('\n')[1:] if store != '']
+
+storeList.sort(key=lambda x: int(x[4]), reverse=True)
+
 print(storeList[0])
 print(storeList[1])
 print(storeList[2])

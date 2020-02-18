@@ -35,6 +35,16 @@ def handle_message(event):
     message = TextSendMessage(text='我聽不懂')
     line_bot_api.reply_message(event.reply_token, message)
 
+# 處理地點訊息，並且回傳經緯度資料
+@handler.add(MessageEvent, message=LocationMessage)
+def handle_message(event):
+    # latitude緯度 longitude經度
+    userlat = event.message.latitude
+    userlon = event.message.longitude
+    message = TextSendMessage(text='經度:{}\緯度:{}'.format(userlon,userlat))
+    line_bot_api.reply_message(event.reply_token, message)
+
+
 import os
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
