@@ -4,6 +4,9 @@ from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import *
 
+#匯入自己的函式
+from function.getOpenData import getMaskOpenData
+
 app = Flask(__name__)
 
 # 設定你的Channel Access Token
@@ -32,22 +35,26 @@ def callback():
 #之後所有機器人判斷邏輯的編輯區
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    message = TemplateSendMessage(
-        alt_text='請傳送座標',
-        template=ConfirmTemplate(
-            text='查詢附近的特約藥局，是否傳送您的經位度座標？',
-            actions=[
-                URIAction(
-                    label='前往地圖',
-                    uri='line://nv/location'
-                ),
-                MessageAction(
-                    label='取消',
-                    text='下次再查'
-                )
-            ]
+    userSentMessage = event.message.text
+    if '口罩' in userSentMessage:
+        message = TextSendMessage(text = getMaskOpenData())
+    else:
+        message = TemplateSendMessage(
+            alt_text='請傳送座標',
+            template=ConfirmTemplate(
+                text='查詢附近的特約藥局，是否傳送您的經位度座標？',
+                actions=[
+                    URIAction(
+                        label='前往地圖',
+                        uri='line://nv/location'
+                    ),
+                    MessageAction(
+                        label='取消',
+                        text='下次再查'
+                    )
+                ]
+            )
         )
-    )
 
     line_bot_api.reply_message(event.reply_token, message)
 
