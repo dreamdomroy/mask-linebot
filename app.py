@@ -36,25 +36,22 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     userSentMessage = event.message.text
-    if '口罩' in userSentMessage:
-        message = TextSendMessage(text = getMaskOpenData())
-    else:
-        message = TemplateSendMessage(
-            alt_text='請傳送座標',
-            template=ConfirmTemplate(
-                text='查詢附近的特約藥局，是否傳送您的經位度座標？',
-                actions=[
-                    URIAction(
-                        label='前往地圖',
-                        uri='line://nv/location'
-                    ),
-                    MessageAction(
-                        label='取消',
-                        text='下次再查'
-                    )
-                ]
-            )
+    message = TemplateSendMessage(
+        alt_text='請傳送座標',
+        template=ConfirmTemplate(
+            text='查詢附近的特約藥局，是否傳送您的經位度座標？',
+            actions=[
+                URIAction(
+                    label='前往地圖',
+                    uri='line://nv/location'
+                ),
+                MessageAction(
+                    label='取消',
+                    text='下次再查'
+                )
+            ]
         )
+    )
 
     line_bot_api.reply_message(event.reply_token, message)
 
@@ -65,6 +62,8 @@ def handle_message(event):
     userlat = event.message.latitude
     userlon = event.message.longitude
     useraddress = event.message.address
+
+    # 縣市與地址
     flag = False
     address = ''
     for text in useraddress:
@@ -80,8 +79,11 @@ def handle_message(event):
     else:
         county = address.split('縣')[0] + '縣'
     
-
-    message = TextSendMessage(text='經度:{}\n緯度:{}\n地址:{}\n無郵遞區號地址:{}\n縣市:{}'.format(userlon,userlat,useraddress,address,county))
+    aroundList = getMaskOpenData(county)
+    storeName = ''
+    for aroundStore in aroundList:
+        storeName += aroundStore[1]+'\n'
+    message = TextSendMessage(text=storeName)
     line_bot_api.reply_message(event.reply_token, message)
 
 
