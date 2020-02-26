@@ -29,7 +29,7 @@ def getMaskOpenData(userLocation):
         if county == userLocation:
             tempList.append(store)
     
-    tempList.sort(key = lambda x : x[4] + x[5],reverse=True)
+    tempList.sort(key = lambda x : int(x[4]) + int(x[5]),reverse=True)
 
     return tempList[:10]
 
