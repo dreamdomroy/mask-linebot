@@ -65,7 +65,16 @@ def handle_message(event):
     userlat = event.message.latitude
     userlon = event.message.longitude
     useraddress = event.message.address
-    message = TextSendMessage(text='經度:{}\n緯度:{}\n地址:{}'.format(userlon,userlat,useraddress))
+    flag = False
+    address = ''
+    for text in useraddress:
+        if not text.isdigit():
+            flag = True
+        if flag:
+            address += text
+    address = address[2:]
+
+    message = TextSendMessage(text='經度:{}\n緯度:{}\n地址:{}\n無郵遞區號地址:{}'.format(userlon,userlat,useraddress,address))
     line_bot_api.reply_message(event.reply_token, message)
 
 
