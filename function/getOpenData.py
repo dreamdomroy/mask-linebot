@@ -18,4 +18,4 @@ def getMaskOpenData():
             store.append(store[2].split('縣')[0] + '縣')
     return storeList
 
-print(getMaskOpenData())
+#print(getMaskOpenData())

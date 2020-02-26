@@ -74,7 +74,14 @@ def handle_message(event):
             address += text
     address = address[2:]
 
-    message = TextSendMessage(text='經度:{}\n緯度:{}\n地址:{}\n無郵遞區號地址:{}'.format(userlon,userlat,useraddress,address))
+    addressList = address.split('縣')
+    if len(addressList) == 1:
+        county = address.split('市')[0] + '市'
+    else:
+        county = address.split('縣')[0] + '縣'
+    
+
+    message = TextSendMessage(text='經度:{}\n緯度:{}\n地址:{}\n無郵遞區號地址:{}\n縣市:{}'.format(userlon,userlat,useraddress,address,county))
     line_bot_api.reply_message(event.reply_token, message)
 
 
