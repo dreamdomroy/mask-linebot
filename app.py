@@ -82,7 +82,7 @@ def handle_message(event):
     aroundList = getMaskOpenData(county)
     storeName = ''
     for aroundStore in aroundList:
-        storeName += aroundStore[1] + '\n成人口罩：' + str(aroundStore[4]) + '\n兒童口罩：' + str(aroundStore[5] + '\n')
+        storeName += aroundStore[1] + '\n成人口罩：' + str(aroundStore[4]) + '\n兒童口罩：' + str(aroundStore[5] + '\n\n')
 
     message = TextSendMessage(text=storeName)
     line_bot_api.reply_message(event.reply_token, message)
